@@ -1,0 +1,93 @@
+.comments {
+    display: grid;
+    grid-template-columns: repeat(2, [col-start] 1fr);
+}
+
+
+
+.comments-input-wrapper {
+    margin-bottom: 20px;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.comments-form {
+    grid-column: 1 / span 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.comments-content {
+    grid-column: 2 / span 1;
+}
+
+.comments-like--active svg {
+    fill:#D22856;
+}
+
+.form-input {
+    border: 2px solid #E5E5E5;
+    border-radius: 1px;   
+    width: 300px;
+}
+
+.comments-form-name  {  
+    width: 300px;    
+}
+
+.comments-form-input {
+    height: 100px;
+}
+
+label {
+
+color:#D22856;
+margin-bottom: 5px;
+text-align: center;
+}
+
+.comment-form-button {
+    background-color: #D22856;
+    border-radius: 2px;
+    width: 100px;
+    color:#E5E5E5;
+    border: 2px solid #D22856;
+}
+
+.comment-message-name {
+    color:#D22856;
+    font-weight: 600; 
+}
+
+.comment-message-text {
+    font-size: 14px;
+}
+
+.comments-message-date {
+    font-size: 12px;
+}
+
+.comments-message-wrapper {
+    display: flex;
+    width: 100px;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.comments-like{
+    display: flex;
+    align-items: center;
+}
+
+.error {
+    border-color: #D22856;
+}
+
+
+
+.comments-like svg:hover {
+    fill:#D22856;
+}
