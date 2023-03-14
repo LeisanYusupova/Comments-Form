@@ -48,38 +48,24 @@ requiredInputs.forEach((input) => {
   });
 });
 
-function validateForm() {
-  if (newItemName.value === '' && newItemText.value === '') {
+function validateName() {
+  if (!newItemName.value.length) {
     newItemName.classList.add('error');
-    newItemText.classList.add('error');
     createErrorMessage(newItemName, 'Поле не заполнено!');
-    createErrorMessage(newItemText, 'Комментарий не может быть пустым!');
     return false;
   }
-
-  if (newItemName.value.length < 3 && newItemText.value === '') {
+  if (!newItemName.value.startsWith('@')) {
     newItemName.classList.add('error');
-    newItemText.classList.add('error');
-    createErrorMessage(newItemName, 'Имя не может быть короче 3 символов!');
-    createErrorMessage(newItemText, 'Комментарий не может быть пустым!');
+    createErrorMessage(newItemName, 'Ник должен начинаться с @');
     return false;
   }
+  return true;
+}
 
-  if (newItemName.value.length < 3) {
-    newItemName.classList.add('error');
-    createErrorMessage(newItemName, 'Имя не может быть короче 3 символов!');
-    return false;
-  }
-
-  if (newItemText.value === '') {
+function validateText() {
+  if (!newItemText.value.length) {
     newItemText.classList.add('error');
     createErrorMessage(newItemText, 'Комментарий не может быть пустым');
-    return false;
-  }
-
-  if (newItemName.value === '') {
-    newItemName.classList.add('error');
-    createErrorMessage(newItemName, 'Поле не заполнено!');
     return false;
   }
   return true;
@@ -90,58 +76,56 @@ newItemForm.addEventListener('submit', (evt) => {
   requiredInputs.forEach((input) => {
     deleteErrorMessage(input);
   });
+  const nameValid = validateName();
+  const textValid = validateText();
 
-  const validate = validateForm();
-  if (!validate) {
-    return false;
+  if (nameValid && textValid) {
+    const task = newItemTemplate.cloneNode(true);
+    const taskText = newItemText.value;
+    const taskName = newItemName.value;
+    const taskDate = newItemDate.value;
+    const date = new Date(taskDate);
+  
+    const defaultDate = new Date();
+    const defaultHours = defaultDate.getHours();
+    const defaultMinutes = defaultDate.getMinutes();
+  
+    let fullTime = `${taskDate} ${defaultHours}:${defaultMinutes}`;
+  
+    if (defaultDate.getDay() === date.getDay()
+    && defaultDate.getMonth() === date.getMonth()
+    && defaultDate.getFullYear() === date.getFullYear()) {
+      fullTime = `Сегодня ${defaultHours}: ${defaultMinutes}`;
+    }
+  
+    if (defaultDate.getDay() - date.getDay() === 1
+    && defaultDate.getMonth() === date.getMonth()
+    && defaultDate.getFullYear() === date.getFullYear()) {
+      fullTime = `Вчера ${defaultHours}: ${defaultMinutes}`;
+    }
+  
+    const currentDate = `Сегодня ${defaultHours}: ${defaultMinutes}`;
+  
+    const taskNameElement = task.querySelector('.comment-message-name');
+    const taskDescription = task.querySelector('p');
+    const taskDateElement = task.querySelector('.comments-message-date');
+  
+    taskDescription.textContent = taskText;
+    taskNameElement.textContent = `${taskName}:`;
+  
+    if (taskDate) {
+      taskDateElement.textContent = fullTime;
+    } else {
+      taskDateElement.textContent = currentDate;
+    }
+  
+    list.appendChild(task);
+  
+    newItemText.value = '';
+    newItemName.value = '';
+    newItemDate.value = '';
+  
+    buttonDeleteHandler(task);
+    likeButtonHandler(task);
   }
-
-  const task = newItemTemplate.cloneNode(true);
-
-  const taskText = newItemText.value;
-  const taskName = newItemName.value;
-  const taskDate = newItemDate.value;
-  const date = new Date(taskDate);
-
-  const defaultDate = new Date();
-  const defaultHours = defaultDate.getHours();
-  const defaultMinutes = defaultDate.getMinutes();
-
-  let fullTime = `${taskDate} ${defaultHours}:${defaultMinutes}`;
-
-  if (defaultDate.getDay() === date.getDay()
-  && defaultDate.getMonth() === date.getMonth()
-  && defaultDate.getFullYear() === date.getFullYear()) {
-    fullTime = `Сегодня ${defaultHours}: ${defaultMinutes}`;
-  }
-
-  if (defaultDate.getDay() - date.getDay() === 1
-  && defaultDate.getMonth() === date.getMonth()
-  && defaultDate.getFullYear() === date.getFullYear()) {
-    fullTime = `Вчера ${defaultHours}: ${defaultMinutes}`;
-  }
-
-  const currentDate = `Сегодня ${defaultHours}: ${defaultMinutes}`;
-
-  const taskNameElement = task.querySelector('.comment-message-name');
-  const taskDescription = task.querySelector('p');
-  const taskDateElement = task.querySelector('.comments-message-date');
-
-  taskDescription.textContent = taskText;
-  taskNameElement.textContent = `${taskName}:`;
-
-  if (taskDate) {
-    taskDateElement.textContent = fullTime;
-  } else {
-    taskDateElement.textContent = currentDate;
-  }
-
-  list.appendChild(task);
-
-  newItemText.value = '';
-  newItemName.value = '';
-  newItemDate.value = '';
-
-  buttonDeleteHandler(task);
-  likeButtonHandler(task);
 });
