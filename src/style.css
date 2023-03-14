@@ -3,14 +3,22 @@
     grid-template-columns: repeat(2, [col-start] 1fr);
 }
 
-
-
 .comments-input-wrapper {
     margin-bottom: 20px;
     margin-top: 20px;
     display: flex;
     flex-direction: column;
 }
+
+
+
+.comments-input-wrapper:nth-child(1) {
+    height: 60px;
+}
+
+.comments-input-wrapper:nth-child(2) {
+    height: 140px;
+} 
 
 .comments-form {
     grid-column: 1 / span 1;
@@ -86,8 +94,7 @@ text-align: center;
     border-color: #D22856;
 }
 
-
-
-.comments-like svg:hover {
-    fill:#D22856;
+.error-message {
+    color: #D22856;
+    margin-top: 5px;
 }

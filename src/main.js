@@ -1,7 +1,6 @@
 /* eslint-disable no-undef */
-const formInputs = Array.from(document.querySelectorAll('.form-input'));
-const requiredInputs = formInputs.slice(0, 2);
 
+const requiredInputs = document.querySelectorAll('.req');
 const newItemForm = document.querySelector('.comments-form');
 const newItemText = newItemForm.querySelector('.comments-form-input');
 const newItemName = newItemForm.querySelector('.comments-form-name');
@@ -29,16 +28,19 @@ function createErrorMessage(input, text) {
   const parent = input.parentNode;
   const errorSpan = document.createElement('span');
   errorSpan.textContent = text;
+  errorSpan.classList.add('error-message');
   parent.append(errorSpan);
 }
 
 function deleteErrorMessage(input) {
   const deleteElemet = input.parentNode.querySelector('span');
-  deleteElemet.remove();
+  if (deleteElemet) {
+    deleteElemet.remove();
+  }
 }
 
 requiredInputs.forEach((input) => {
-  input.addEventListener('keyup', () => {
+  input.addEventListener('input', () => {
     if (input.classList.contains('error')) {
       input.classList.remove('error');
       deleteErrorMessage(input);
@@ -46,17 +48,7 @@ requiredInputs.forEach((input) => {
   });
 });
 
-newItemForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-
-  requiredInputs.forEach((input) => {
-    if (input.value === '') {
-      input.classList.add('error');
-      return false;
-    }
-    input.classList.remove('error');
-  });
-
+function validateForm() {
   if (newItemName.value === '' && newItemText.value === '') {
     newItemName.classList.add('error');
     newItemText.classList.add('error');
@@ -64,22 +56,45 @@ newItemForm.addEventListener('submit', (evt) => {
     createErrorMessage(newItemText, 'Комментарий не может быть пустым!');
     return false;
   }
-  newItemName.classList.remove('error');
-  newItemText.classList.remove('error');
+
+  if (newItemName.value.length < 3 && newItemText.value === '') {
+    newItemName.classList.add('error');
+    newItemText.classList.add('error');
+    createErrorMessage(newItemName, 'Имя не может быть короче 3 символов!');
+    createErrorMessage(newItemText, 'Комментарий не может быть пустым!');
+    return false;
+  }
+
+  if (newItemName.value.length < 3) {
+    newItemName.classList.add('error');
+    createErrorMessage(newItemName, 'Имя не может быть короче 3 символов!');
+    return false;
+  }
 
   if (newItemText.value === '') {
     newItemText.classList.add('error');
-    createErrorMessage(newItemText, 'Коvментарий не может быть пустым');
+    createErrorMessage(newItemText, 'Комментарий не может быть пустым');
     return false;
   }
-  newItemText.classList.remove('error');
 
   if (newItemName.value === '') {
     newItemName.classList.add('error');
-    createErrorMessage(newItemName, 'Поле не зпаполнено');
+    createErrorMessage(newItemName, 'Поле не заполнено!');
     return false;
   }
-  newItemName.classList.remove('error');
+  return true;
+}
+
+newItemForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  requiredInputs.forEach((input) => {
+    deleteErrorMessage(input);
+  });
+
+  const validate = validateForm();
+  if (!validate) {
+    return false;
+  }
 
   const task = newItemTemplate.cloneNode(true);
 
