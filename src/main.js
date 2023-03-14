@@ -59,6 +59,11 @@ function validateName() {
     createErrorMessage(newItemName, 'Ник должен начинаться с @');
     return false;
   }
+  if (newItemName.value.length < 2) {
+    newItemName.classList.add('error');
+    createErrorMessage(newItemName, 'Ник не может состоять только из @');
+    return false;
+  }
   return true;
 }
 
@@ -85,7 +90,6 @@ newItemForm.addEventListener('submit', (evt) => {
     const taskName = newItemName.value;
     const taskDate = newItemDate.value;
     const date = new Date(taskDate);
-  
     const defaultDate = new Date();
     const defaultHours = defaultDate.getHours();
     const defaultMinutes = defaultDate.getMinutes();
@@ -105,7 +109,6 @@ newItemForm.addEventListener('submit', (evt) => {
     }
   
     const currentDate = `Сегодня ${defaultHours}: ${defaultMinutes}`;
-  
     const taskNameElement = task.querySelector('.comment-message-name');
     const taskDescription = task.querySelector('p');
     const taskDateElement = task.querySelector('.comments-message-date');

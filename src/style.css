@@ -10,7 +10,9 @@
     flex-direction: column;
 }
 
-
+.comment-message {
+    margin-bottom: 10px;
+}
 
 .comments-input-wrapper:nth-child(1) {
     height: 60px;
