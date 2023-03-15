@@ -25,6 +25,7 @@ function likeButtonHandler(item) {
 }
 
 function createErrorMessage(input, text) {
+  input.classList.add('error');
   const parent = input.parentNode;
   const errorSpan = document.createElement('span');
   errorSpan.textContent = text;
@@ -50,17 +51,14 @@ requiredInputs.forEach((input) => {
 
 function validateName() {
   if (!newItemName.value.length) {
-    newItemName.classList.add('error');
     createErrorMessage(newItemName, 'Поле не заполнено!');
     return false;
   }
   if (!newItemName.value.startsWith('@')) {
-    newItemName.classList.add('error');
     createErrorMessage(newItemName, 'Ник должен начинаться с @');
     return false;
   }
   if (newItemName.value.length < 2) {
-    newItemName.classList.add('error');
     createErrorMessage(newItemName, 'Ник не может состоять только из @');
     return false;
   }
@@ -69,7 +67,6 @@ function validateName() {
 
 function validateText() {
   if (!newItemText.value.length) {
-    newItemText.classList.add('error');
     createErrorMessage(newItemText, 'Комментарий не может быть пустым');
     return false;
   }
